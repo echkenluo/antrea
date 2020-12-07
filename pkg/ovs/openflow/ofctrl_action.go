@@ -209,6 +209,19 @@ func (a *ofFlowAction) SetARPTpa(addr net.IP) FlowBuilder {
 	return a.builder
 }
 
+// Add vlanid operation 
+func (a *ofFlowAction) SetVLANId(vlanId uint16) FlowBuilder {
+    setVLANIdAct := &ofctrl.SetVLANAction{VlanID: vlanId}
+    a.builder.ApplyAction(setVLANIdAct)
+    return a.builder
+}
+
+func (a *ofFlowAction) PopVLANId() FlowBuilder {
+    popVLANIdAct := &ofctrl.PopVLANAction{}
+    a.builder.ApplyAction(popVLANIdAct)
+    return a.builder
+}
+
 // SetSrcIP is an action to modify packet source IP address to the specified address.
 func (a *ofFlowAction) SetSrcIP(addr net.IP) FlowBuilder {
 	setSrcIPAct := &ofctrl.SetSrcIPAction{IP: addr}
