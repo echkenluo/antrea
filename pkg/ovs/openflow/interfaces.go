@@ -187,9 +187,9 @@ type Action interface {
 	SetARPTha(addr net.HardwareAddr) FlowBuilder
 	SetARPSpa(addr net.IP) FlowBuilder
 	SetARPTpa(addr net.IP) FlowBuilder
-    // Add vlan operations
-    SetVLANId(vlanId uint16) FlowBuilder
-    PopVLANId() FlowBuilder
+	// Add vlan operations
+	SetVLANId(vlanId uint16) FlowBuilder
+	PopVLANId() FlowBuilder
 	SetSrcIP(addr net.IP) FlowBuilder
 	SetDstIP(addr net.IP) FlowBuilder
 	SetTunnelDst(addr net.IP) FlowBuilder
@@ -200,6 +200,8 @@ type Action interface {
 	Learn(id TableIDType, priority uint16, idleTimeout, hardTimeout uint16, cookieID uint64) LearnAction
 	GotoTable(table TableIDType) FlowBuilder
 	SendToController(reason uint8) FlowBuilder
+	// Add flood support
+	Flood(vlanId uint16, floodPortList []uint32) FlowBuilder
 	Note(notes string) FlowBuilder
 }
 
@@ -216,10 +218,10 @@ type FlowBuilder interface {
 	MatchSrcIPNet(ipNet net.IPNet) FlowBuilder
 	MatchDstMAC(mac net.HardwareAddr) FlowBuilder
 	MatchSrcMAC(mac net.HardwareAddr) FlowBuilder
-    // Add mac match with mac mask
-    MatchSrcMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
-    MatchDstMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
-    MatchVlanId(vlanId uint16) FlowBuilder
+	// Add mac match with mac mask
+	MatchSrcMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
+	MatchDstMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
+	MatchVlanId(vlanId uint16) FlowBuilder
 	MatchARPSha(mac net.HardwareAddr) FlowBuilder
 	MatchARPTha(mac net.HardwareAddr) FlowBuilder
 	MatchARPSpa(ip net.IP) FlowBuilder
@@ -263,6 +265,10 @@ type FlowBuilder interface {
 type LearnAction interface {
 	DeleteLearned() LearnAction
 	MatchEthernetProtocolIP(isIPv6 bool) LearnAction
+	MatchLearnedEthernetDst() LearnAction
+	MatchLearnedVlanTci() LearnAction
+	MatchLearnedEthernetDstFromArpSha() LearnAction
+	LoadRegFromField(regID int, fromFiledName string, rng Range) LearnAction
 	MatchTransportDst(protocol Protocol) LearnAction
 	MatchLearnedTCPDstPort() LearnAction
 	MatchLearnedUDPDstPort() LearnAction

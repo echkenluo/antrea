@@ -333,23 +333,23 @@ func (b *ofFlowBuilder) MatchSrcMAC(mac net.HardwareAddr) FlowBuilder {
 
 // Add support to mac mask value
 func (b *ofFlowBuilder) MatchSrcMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder {
-    b.matchers = append(b.matchers, fmt.Sprintf("dl_src=%s", mac.String()))
-    b.Match.MacSa = &mac
-    b.Match.MacSaMask = &macMask
-    return b
+	b.matchers = append(b.matchers, fmt.Sprintf("dl_src=%s", mac.String()))
+	b.Match.MacSa = &mac
+	b.Match.MacSaMask = &macMask
+	return b
 }
 
 func (b *ofFlowBuilder) MatchDstMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder {
-    b.matchers = append(b.matchers, fmt.Sprintf("dl_dst=%s", mac.String()))
-    b.Match.MacDa = &mac
-    b.Match.MacDaMask = &macMask
-    return b
+	b.matchers = append(b.matchers, fmt.Sprintf("dl_dst=%s", mac.String()))
+	b.Match.MacDa = &mac
+	b.Match.MacDaMask = &macMask
+	return b
 }
 
 func (b *ofFlowBuilder) MatchVlanId(vlanId uint16) FlowBuilder {
-    b.matchers = append(b.matchers, fmt.Sprintf("vlan_tci=%d", vlanId))
-    b.Match.VlanId = vlanId
-    return b
+	b.matchers = append(b.matchers, fmt.Sprintf("vlan_tci=%d", vlanId))
+	b.Match.VlanId = vlanId
+	return b
 }
 
 // MatchARPSha adds match condition for matching ARP source host address.

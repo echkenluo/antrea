@@ -20,6 +20,7 @@ type ofFlow struct {
 	// ReplayFlows() when replaying the Flow to OVS. For thread safety, any access
 	// to Flow.Table should hold the replayMutex read lock.
 	*ofctrl.Flow
+	*ofctrl.Flood
 
 	// matchers is string slice, it is used to generate a readable match string of the Flow.
 	matchers []string
