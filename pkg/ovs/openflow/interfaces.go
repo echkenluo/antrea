@@ -187,6 +187,9 @@ type Action interface {
 	SetARPTha(addr net.HardwareAddr) FlowBuilder
 	SetARPSpa(addr net.IP) FlowBuilder
 	SetARPTpa(addr net.IP) FlowBuilder
+	// Add vlan operations
+	SetVLANId(vlanId uint16) FlowBuilder
+	PopVLANId() FlowBuilder
 	SetSrcIP(addr net.IP) FlowBuilder
 	SetDstIP(addr net.IP) FlowBuilder
 	SetTunnelDst(addr net.IP) FlowBuilder
@@ -213,6 +216,7 @@ type FlowBuilder interface {
 	MatchSrcIPNet(ipNet net.IPNet) FlowBuilder
 	MatchDstMAC(mac net.HardwareAddr) FlowBuilder
 	MatchSrcMAC(mac net.HardwareAddr) FlowBuilder
+	MatchVlanId(vlanId uint16) FlowBuilder
 	MatchARPSha(mac net.HardwareAddr) FlowBuilder
 	MatchARPTha(mac net.HardwareAddr) FlowBuilder
 	MatchARPSpa(ip net.IP) FlowBuilder

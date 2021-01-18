@@ -331,6 +331,12 @@ func (b *ofFlowBuilder) MatchSrcMAC(mac net.HardwareAddr) FlowBuilder {
 	return b
 }
 
+func (b *ofFlowBuilder) MatchVlanId(vlanId uint16) FlowBuilder {
+	b.matchers = append(b.matchers, fmt.Sprintf("vlan_tci=%d", vlanId))
+	b.Match.VlanId = vlanId
+	return b
+}
+
 // MatchARPSha adds match condition for matching ARP source host address.
 func (b *ofFlowBuilder) MatchARPSha(mac net.HardwareAddr) FlowBuilder {
 	b.matchers = append(b.matchers, fmt.Sprintf("arp_sha=%s", mac.String()))
