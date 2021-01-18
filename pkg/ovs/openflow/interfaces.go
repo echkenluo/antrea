@@ -216,6 +216,8 @@ type FlowBuilder interface {
 	MatchSrcIPNet(ipNet net.IPNet) FlowBuilder
 	MatchDstMAC(mac net.HardwareAddr) FlowBuilder
 	MatchSrcMAC(mac net.HardwareAddr) FlowBuilder
+	MatchSrcMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
+	MatchDstMACWithMask(mac net.HardwareAddr, macMask net.HardwareAddr) FlowBuilder
 	MatchVlanId(vlanId uint16) FlowBuilder
 	MatchARPSha(mac net.HardwareAddr) FlowBuilder
 	MatchARPTha(mac net.HardwareAddr) FlowBuilder
