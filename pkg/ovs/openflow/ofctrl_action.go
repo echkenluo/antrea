@@ -212,7 +212,6 @@ func (a *ofFlowAction) SetARPTpa(addr net.IP) FlowBuilder {
 // Add vlanid operation
 func (a *ofFlowAction) SetVLANId(vlanId uint16) FlowBuilder {
 	setVLANIdAct := &ofctrl.SetVLANAction{VlanID: vlanId}
-    // a.builder.ofFlow.Flow.SetVlan(vlanId)
 	a.builder.ApplyAction(setVLANIdAct)
 	return a.builder
 }
@@ -457,6 +456,29 @@ func (a *ofLearnAction) MatchLearnedSCTPDstPort() LearnAction {
 // must match the sctp_dst of the packet currently being processed.
 func (a *ofLearnAction) MatchLearnedSCTPv6DstPort() LearnAction {
 	return a.MatchTransportDst(ProtocolSCTPv6)
+}
+
+// Add vlan L2 learning support, arp based && ip based
+func (a *ofLearnAction) MatchLearnedEthernetDst() LearnAction {
+	a.nxLearn.AddMatch(&ofctrl.LearnField{Name: "NXM_OF_ETH_DST"}, 6*8, &ofctrl.LearnField{Name: "NXM_OF_ETH_SRC"}, nil)
+	return a
+}
+
+func (a *ofLearnAction) MatchLearnedVlanTci() LearnAction {
+	a.nxLearn.AddMatch(&ofctrl.LearnField{Name: "OXM_OF_VLAN_VID"}, 12, &ofctrl.LearnField{Name: "OXM_OF_VLAN_VID"}, nil)
+	return a
+}
+
+func (a *ofLearnAction) MatchLearnedEthernetDstFromArpSha() LearnAction {
+	a.nxLearn.AddMatch(&ofctrl.LearnField{Name: "NXM_OF_ETH_DST"}, 6*8, &ofctrl.LearnField{Name: "OXM_OF_ARP_SHA"}, nil)
+	return a
+}
+
+func (a *ofLearnAction) LoadRegFromField(regID int, fromFieldName string, rng Range) LearnAction {
+	toField := &ofctrl.LearnField{Name: fmt.Sprintf("NXM_NX_REG%d", regID), Start: uint16(rng[0])}
+	fromField := &ofctrl.LearnField{Name: fromFieldName, Start: 0}
+	a.nxLearn.AddLoadAction(toField, uint16(rng.Length()), fromField, nil)
+	return a
 }
 
 // MatchLearnedSrcIP makes the learned flow to match the nw_src of current IP packet.

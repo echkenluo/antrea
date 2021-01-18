@@ -262,6 +262,10 @@ type FlowBuilder interface {
 type LearnAction interface {
 	DeleteLearned() LearnAction
 	MatchEthernetProtocolIP(isIPv6 bool) LearnAction
+	MatchLearnedEthernetDst() LearnAction
+	MatchLearnedVlanTci() LearnAction
+	MatchLearnedEthernetDstFromArpSha() LearnAction
+	LoadRegFromField(regID int, fromFiledName string, rng Range) LearnAction
 	MatchTransportDst(protocol Protocol) LearnAction
 	MatchLearnedTCPDstPort() LearnAction
 	MatchLearnedUDPDstPort() LearnAction
